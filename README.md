@@ -1,6 +1,7 @@
 - 👋 Hi, I’m Gerges Tharwat
-- 👀 I’m interested in Back-end software engineering, Machine Learning
-- 🌱 I’m currently learning .Net Framework
+- Studed in Software Engineering department
+- 👀 I’m interested in Back-end software engineering with hands-on Machine Learning
+- 🌱 I’m currently  working with .Net Core framework 
 - 📫 How to reach me
 Email: swe.gerges@gmail.com
 Mobile: +201009058121
