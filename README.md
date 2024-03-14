@@ -1,6 +1,6 @@
 - 👋 Hi, I’m Gerges Tharwat
 - Studed in Software Engineering department | Faculty of Computer Science &IT - ACU
-- 👀 I’m interested in Back-end software engineering with hands-on Machine Learning
+- 👀 I’m interested in Back-end software engineering and Machine Learning
 - 🌱 I’m currently  working with .Net Core framework 
 - 📫 How to reach me
 Email: swe.gerges@gmail.com
