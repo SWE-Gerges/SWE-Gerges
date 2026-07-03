@@ -1,7 +1,7 @@
 # Hi, I'm Gerges Tharwat 👋
-### Senior Software Engineer | .NET Backend & Integration Specialist
+###  Software Engineer | .NET Backend & Integration Specialist
 
-I am a Senior Software Engineer specializing in designing, building, and optimizing high-performance distributed systems, multi-tenant architectures, and complex third-party API integrations using **.NET Core**, **MSSQL**, and **MongoDB**. 
+I am a  Software Engineer specializing in designing, building, and optimizing high-performance distributed systems, multi-tenant architectures, and complex third-party API integrations using **.NET Core**, **MSSQL**, and **MongoDB**. 
 
 My core focus is on building resilient travel technology platforms, high-concurrence meta-search engines, and robust security frameworks.
 
