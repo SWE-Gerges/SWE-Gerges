@@ -1,91 +1,117 @@
-# Hi, I'm Gerges Tharwat 👋
-###  Software Engineer | .NET Backend & Integration Specialist
+<h1 align="center">Gerges Tharwat</h1>
 
-I am a  Software Engineer specializing in designing, building, and optimizing high-performance distributed systems, multi-tenant architectures, and complex third-party API integrations using **.NET Core**, **MSSQL**, and **MongoDB**. 
+<p align="center">
+  <b>.NET Software Engineer &middot; Backend, APIs &amp; AI integrations</b><br/>
+  Cairo, Egypt
+</p>
 
-My core focus is on building resilient travel technology platforms, high-concurrence meta-search engines, and robust security frameworks.
+<p align="center">
+  <a href="https://www.linkedin.com/in/gergestharwat/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-gergestharwat-0A66C2?style=flat&logo=linkedin&logoColor=white"/></a>
+  <a href="mailto:swe.gerges@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-swe.gerges%40gmail.com-D14836?style=flat&logo=gmail&logoColor=white"/></a>
+</p>
+
+I build the backend of travel-booking platforms: many tenants on one API, many hotel and transfer suppliers behind one
+contract, and a chat agent that can take a booking all the way to payment without ever being trusted with the price.
+About four years of production .NET, and the last two on a multi-tenant travel platform.
 
 ---
 
-## 🛠️ Tech Stack
+## How I got here
 
-- **Languages**: C# (Expert), JavaScript/TypeScript, C++, Java, Python
-- **Frameworks**: .NET Core/.NET 8, ASP.NET Core (Web API, MVC), Angular
-- **Databases & Caching**: SQL Server (MSSQL), MySQL, PostgreSQL, MongoDB, Redis (Distributed Caching)
-- **Architecture**: Clean Architecture, Domain-Driven Design (DDD), Microservices, CQRS, Repository & Unit of Work, Multi-Tenant Isolation
-- **Testing & Tools**: xUnit, NUnit, Moq, Docker, Hangfire, Polly, Git
+| When | Where | What I did |
+| --- | --- | --- |
+| Jul 2022 &ndash; Feb 2023 | VB Solution | **.NET backend intern.** My first APIs and endpoints in ASP.NET Core. |
+| Feb 2023 &ndash; Mar 2024 | National service | **Full-stack .NET developer.** Whole projects on ASP.NET Core MVC and Web API, built on Onion architecture so they stayed loosely coupled. |
+| Feb &ndash; Jun 2024 | Microfilm Egypt | **.NET developer.** A document-archiving system with background queues, and SQL tuning for millions of records. |
+| Jun 2024 &ndash; now | Techeffic &#124; Depkey Group | **Full-stack engineer.** I own the backend of a multi-tenant travel platform, its supplier integrations and meta-search, and an LLM-orchestrated booking chatbot. |
+
+Education: B.Sc. Computer Science (Software Engineering), Ahram Canadian University, 2018&ndash;2022 &middot; graduation project graded 4.00 (A) &middot; ITI .NET Core web development track.
 
 ---
 
-## 🏗️ System Architecture Case Studies
+## What I work on, in the order I would explain it
 
-The following case studies outline the architecture of enterprise-scale proprietary platforms I have designed and built.
-
-### Case Study 1: High-Performance Travel Meta-Search Engine & Aggregator
-Engineered an asynchronous meta-search aggregation engine that queries and consolidates hotel and transfer rates from multiple global suppliers concurrently.
-
-#### Architecture Flow:
 ```mermaid
-graph TD
-    Client[Web / Mobile Client] -->|Search Query| GW[API Gateway / YARP]
-    GW -->|Route Request| MSE[Meta-Search Engine Core]
-    
-    subgraph Parallel Aggregation Flow [Task.WhenAll Concurrency]
-        MSE -->|API call 1| P1[Hotelbeds Provider]
-        MSE -->|API call 2| P2[Bedzinn Provider]
-        MSE -->|API call 3| P3[WebBeds Provider]
-        MSE -->|API call N| PN[Other Supplier APIs]
-    end
-    
-    P1 -.->|Polly Retry / CB| MSE
-    P2 -.->|Polly Retry / CB| MSE
-    P3 -.->|Polly Retry / CB| MSE
-    PN -.->|Polly Retry / CB| MSE
-    
-    MSE <-->|Check / Write Cache| Redis[(Redis Distributed Cache)]
-    MSE -->|Normalize & Merge| Normalizer[Data Normalization Engine]
-    Normalizer -->|Response Payload| Client
+flowchart LR
+    A["Clients<br/>web, widget, partners"] --> B["One multi-tenant API"]
+    B --> C{"Who may see which<br/>bookings? (role)"}
+    B --> D["Supplier fan-out<br/>timeouts, retries, circuit breakers"]
+    D --> E["Merge and price<br/>one canonical hotel"]
+    B --> F["Customer messages<br/>outbox to WhatsApp Cloud API"]
+    B --> G["Chat agent<br/>LLM tools behind guards"]
 ```
 
-#### Core Engineering Challenges Solved:
-1. **Parallel Concurrency**: Utilized C# task parallelism (`Task.WhenAll`) to query multiple external APIs simultaneously, reducing aggregate response times by 50%+.
-2. **Fault Tolerance & Resilience**: Implemented policies via **Polly** (Retry with jitter, Circuit Breaker, and Timeouts) to prevent slow or unresponsive supplier APIs from locking main system threads.
-3. **Cache Mitigation**: Integrated a **Redis** distributed cache layer to cache hotel static data and active query results, mitigating provider rate limits and reducing database overhead.
-4. **Static Data Migration**: Migrated over 5M supplier hotel records from MSSQL to **MongoDB**. Designed a dynamic C# mapper to query provider-specific collections and map them into standardized DTOs on the fly.
+**1. One platform, many tenants.**
+A single backend serves B2C, B2B and corporate (B2E) clients with tenant isolation. I refactored the core
+authentication and authorization project to give it granular role-based access control, so what a user can see of a
+booking depends on their role. I also designed the extranet module that lets a client sell its own hotel inventory
+directly.
+&rarr; Reference implementation: [**rbac-role-families**](https://github.com/SWE-Gerges/rbac-role-families)
+
+**2. Many suppliers, one answer.**
+An asynchronous meta-search and aggregation engine that queries hotel and transfer suppliers at the same time and
+copes with their different latencies and rate limits (Redis caching, Polly retries and circuit breakers). I took
+supplier integrations through the providers' certification audits that gate live data, and migrated 5M+ supplier hotel
+records from SQL Server to MongoDB behind a mapper that turns provider-specific documents into one standard shape.
+&rarr; Reference implementations: [**hotel-supplier-hub**](https://github.com/SWE-Gerges/hotel-supplier-hub) and
+[**mongo-content-store**](https://github.com/SWE-Gerges/mongo-content-store)
+
+**3. Telling the customer, reliably.**
+Transactional reservation updates sent through the Meta WhatsApp Cloud API directly, instead of through a middleman
+provider. The hard part is not sending one message but never sending it twice and knowing what to do when the answer
+is lost.
+&rarr; Reference implementation: [**whatsapp-cloud-notifications**](https://github.com/SWE-Gerges/whatsapp-cloud-notifications)
+
+**4. A chat agent that can book, but cannot be talked into anything.**
+An LLM-orchestrated assistant where users search, manage and pay for flights, hotels and transfers in conversation.
+Claude, Gemini and Groq sit behind one switchable abstraction, a guard layer redacts personal and card data before the
+model sees it, and rate limiting keeps inference cost under control. I also own its deployment: servers, CI/CD and
+hosting.
+&rarr; Reference implementation: [**llm-booking-agent**](https://github.com/SWE-Gerges/llm-booking-agent)
 
 ---
 
-### Case Study 2: Multi-Tenant Booking Platform & Extranet (B2E/B2B)
-Designed a single-backend, multi-tenant travel reservation portal enabling corporate enterprises (B2E) to manage bookings, ticket allocations, and direct-owned hotel inventories.
+## Open-source reference implementations
 
-#### Architecture Flow:
-```mermaid
-graph TD
-    User[B2B Corporate User] -->|Request + TenantId| GW[API Gateway]
-    GW -->|Validate JWT & RoleId| Auth[Custom RBAC Auth Filter]
-    Auth -->|Valid Access| Core[Multi-Tenant Backend]
-    
-    Core -->|Query Inventory| Extranet[Extranet Owned Hotels Module]
-    Core -->|Query Bookings| DB[(MSSQL Database - Tenant Isolation)]
-    
-    Core -->|Trigger Notifications| WA[WhatsApp API Integration]
-    WA -->|Direct webhook| MetaAPI[Meta WhatsApp Business API]
-```
+Five repositories, each runnable with only the .NET SDK, each with architecture decision records and a README that says
+plainly what is tested and what is not.
 
-#### Core Engineering Challenges Solved:
-1. **Tenant Isolation**: Engineered a database strategy to isolate corporate transaction logs and booking details securely based on incoming `TenantId`.
-2. **Granular RBAC**: Refactored the core authentication project to enforce custom Role-Based Access Control (RBAC), mapping permissions based on `RoleId` to govern booking edit/view rights.
-3. **Direct Meta Integration**: Built a custom SMS/Notification handler communicating directly with the **Meta WhatsApp Business API** for transactional updates, bypassing costly third-party notification middle-men.
-4. **Extranet Inventory**: Created a module enabling hotels owned directly by the client to load rates, availability, and inventory directly into the system, bypassing third-party GDS fees.
+| Repository | What it shows | CI |
+| --- | --- | --- |
+| [**llm-booking-agent**](https://github.com/SWE-Gerges/llm-booking-agent) | A provider-agnostic agent loop with tool policies, where money and identity are owned by the server, never the model. | [![CI](https://github.com/SWE-Gerges/llm-booking-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/llm-booking-agent/actions/workflows/ci.yml) |
+| [**whatsapp-cloud-notifications**](https://github.com/SWE-Gerges/whatsapp-cloud-notifications) | An outbox, signed webhooks, delivery receipts, the 24-hour window rule, and a state for "we do not know if it was sent". | [![CI](https://github.com/SWE-Gerges/whatsapp-cloud-notifications/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/whatsapp-cloud-notifications/actions/workflows/ci.yml) |
+| [**mongo-content-store**](https://github.com/SWE-Gerges/mongo-content-store) | Tolerant decoding of messy supplier data, a resumable MongoDB-to-OpenSearch sync, and a versioned index swapped by alias. | [![CI](https://github.com/SWE-Gerges/mongo-content-store/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/mongo-content-store/actions/workflows/ci.yml) |
+| [**hotel-supplier-hub**](https://github.com/SWE-Gerges/hotel-supplier-hub) | Resilient fan-out to suppliers with different protocols, canonical hotel identities, and quotes that book exactly what was shown. | [![CI](https://github.com/SWE-Gerges/hotel-supplier-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/hotel-supplier-hub/actions/workflows/ci.yml) |
+| [**rbac-role-families**](https://github.com/SWE-Gerges/rbac-role-families) | Roles grouped into families whose strategy produces the query itself, so lists and single lookups cannot disagree. | [![CI](https://github.com/SWE-Gerges/rbac-role-families/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/rbac-role-families/actions/workflows/ci.yml) |
+
+These are original code written to demonstrate the patterns. They use fakes instead of real suppliers or providers, and
+none of them contains an employer's code or data.
 
 ---
 
-## 📬 Connect With Me
+## Stack
 
-- **LinkedIn**: [https://www.linkedin.com/in/gergestharwat/](https://www.linkedin.com/in/gergestharwat/)
-- **Email**: [swe.gerges@gmail.com](mailto:swe.gerges@gmail.com)
+<p>
+  <img alt="C#" src="https://img.shields.io/badge/C%23-239120?style=flat&logo=csharp&logoColor=white"/>
+  <img alt=".NET" src="https://img.shields.io/badge/.NET-512BD4?style=flat&logo=dotnet&logoColor=white"/>
+  <img alt="ASP.NET Core" src="https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=flat&logo=dotnet&logoColor=white"/>
+  <img alt="Entity Framework Core" src="https://img.shields.io/badge/EF%20Core-512BD4?style=flat&logo=dotnet&logoColor=white"/>
+  <img alt="SQL Server" src="https://img.shields.io/badge/SQL%20Server-CC2927?style=flat&logo=microsoftsqlserver&logoColor=white"/>
+  <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white"/>
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white"/>
+  <img alt="Redis" src="https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white"/>
+  <img alt="Angular" src="https://img.shields.io/badge/Angular-DD0031?style=flat&logo=angular&logoColor=white"/>
+  <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white"/>
+</p>
 
-<!---
-SWE-Gerges/SWE-Gerges is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+**Backend:** ASP.NET Core Web API and MVC, EF Core, Dapper, REST design and versioning, Hangfire, Polly<br/>
+**Architecture:** clean and onion architecture, multi-tenancy, RBAC, repository and unit of work, CQRS<br/>
+**AI:** LLM orchestration and tool calling (Claude, Gemini, Groq), multi-model abstraction, PII redaction, rate limiting<br/>
+**Testing and delivery:** xUnit, NUnit, Moq, CI/CD pipelines, Git
+
+---
+
+<p align="center">
+  Want to talk about backend design, supplier integrations or LLM agents?
+  <a href="https://www.linkedin.com/in/gergestharwat/">LinkedIn</a> &middot; <a href="mailto:swe.gerges@gmail.com">swe.gerges@gmail.com</a>
+</p>
