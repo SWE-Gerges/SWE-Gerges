@@ -26,7 +26,7 @@ through certification and deployment.
 | Feb &ndash; Jun 2024 | Microfilm Egypt | **Software Engineer, .NET Developer.** Delivered solutions in .NET Core (ASP.NET Web API and MVC): database design, unit tests, integration with other software, and deployment, including a high-throughput digital archiving engine with background processing queues. |
 | Jun 2024 &ndash; now | Techeffic &#124; Depkey Group | **Full-Stack Software Engineer.** Own the backend of a multi-tenant (B2C / B2B / B2E) travel booking platform, its supplier integrations and meta-search, and an agentic, LLM-orchestrated booking assistant, working in .NET Core with hands-on Angular. |
 
-Education: B.Sc. Computer Science, Software Engineering, Ahram Canadian University (ACU), 2018&ndash;2022 &middot; graduation project grade 4.00 (A) &middot; ITI .NET Core web development (2021).
+Education: B.Sc. Computer Science, Software Engineering, Ahram Canadian University (ACU), 2018&ndash;2022 &middot; graduation project grade 4.00 (A) &middot; Training ITI .NET Core web development (2021).
 
 ---
 
