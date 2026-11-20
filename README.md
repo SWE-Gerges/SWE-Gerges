@@ -1,7 +1,7 @@
 <h1 align="center">Gerges Tharwat</h1>
 
 <p align="center">
-  <b>.NET Software Engineer &middot; Backend, APIs &amp; AI Integrations</b><br/>
+  <b>.NET Software Engineer &middot; Backend, APIs &amp; Agentic AI</b><br/>
   Cairo, Egypt
 </p>
 
@@ -11,7 +11,7 @@
 </p>
 
 .NET backend engineer with ~4 years of experience building multi-tenant travel-booking platforms, high-volume supplier
-integrations (Hotels and Flights providers), WhatsApp Integration and an LLM-orchestrated booking chatbot. Strong in
+integrations (Hotels and Flights providers), WhatsApp Integration and an agentic, tool-calling booking assistant. Strong in
 ASP.NET Core, clean architecture, MongoDB/SQL Server and resilient distributed systems. Owns work end to end, from design
 through certification and deployment.
 
@@ -24,7 +24,7 @@ through certification and deployment.
 | Jul 2022 &ndash; Feb 2023 | VB Solution | **.NET Backend Developer Intern.** Built APIs and endpoints for web applications using ASP.NET Core. |
 | Feb 2023 &ndash; Mar 2024 | Egyptian Armed Forces (military service) | **Full Stack .NET Developer.** Delivered full projects on .NET Core (MVC, Web API) using Onion Architecture to build loosely coupled applications. |
 | Feb &ndash; Jun 2024 | Microfilm Egypt | **Software Engineer, .NET Developer.** Delivered solutions in .NET Core (ASP.NET Web API and MVC): database design, unit tests, integration with other software, and deployment, including a high-throughput digital archiving engine with background processing queues. |
-| Jun 2024 &ndash; now | Techeffic &#124; Depkey Group | **Full-Stack Software Engineer.** Own the backend of a multi-tenant (B2C / B2B / B2E) travel booking platform, its supplier integrations and meta-search, and an LLM-orchestrated booking chatbot, working in .NET Core with hands-on Angular. |
+| Jun 2024 &ndash; now | Techeffic &#124; Depkey Group | **Full-Stack Software Engineer.** Own the backend of a multi-tenant (B2C / B2B / B2E) travel booking platform, its supplier integrations and meta-search, and an agentic, LLM-orchestrated booking assistant, working in .NET Core with hands-on Angular. |
 
 Education: B.Sc. Computer Science, Software Engineering, Ahram Canadian University (ACU), 2018&ndash;2022 &middot; graduation project grade 4.00 (A) &middot; ITI .NET Core web development (2021).
 
@@ -39,7 +39,7 @@ flowchart LR
     B --> D["Concurrent supplier fan-out<br/>Hotelbeds, Bedzinn, WebBeds, TBO, RateHawk<br/>Polly retry + circuit breaker, Redis cache"]
     D --> E["Merge and price<br/>one canonical hotel"]
     B --> F["Reservation updates<br/>direct WhatsApp / Meta API"]
-    B --> G["Chat agent<br/>Claude, Gemini, Groq behind guards"]
+    B --> G["Agentic assistant<br/>tool calling, Claude, Gemini, Groq, guardrails"]
 ```
 
 **1. Multi-tenant booking platform and extranet.**
@@ -61,13 +61,14 @@ MongoDB, with a dynamic C# mapper that reads provider-specific collections and m
 &rarr; Template: [**hotel-supplier-hub**](https://github.com/SWE-Gerges/hotel-supplier-hub) and
 [**mongo-content-store**](https://github.com/SWE-Gerges/mongo-content-store)
 
-**3. AI travel advisor chatbot (LLM orchestrator).**
-Architected an end-to-end agent-driven booking ecosystem (widget and standalone site) where users search, manage and pay
-for flights, hotels and transfers through a conversational interface. Integrated multiple LLMs (Claude, Gemini, Groq)
-behind a model-switching abstraction with one-click switching, and built an Orchestrator pattern that routes user intents
-to specialized tools. A pre-processing Guard Layer redacts PII and payment card numbers, with rate limiting and abuse
-prevention to control inference costs. Own the deployment lifecycle: server configuration, CI/CD pipelines and
-high-availability hosting.
+**3. Agentic AI travel advisor (LLM orchestrator).**
+Architected an end-to-end agentic booking assistant (widget and standalone site) that goes beyond Q&A: through a
+conversational interface it calls the platform's business APIs as tools and walks the customer through search, pricing,
+traveller details, payment and booking status for flights, hotels and transfers. Integrated multiple LLMs (Claude,
+Gemini, Groq) behind a model-switching abstraction with one-click switching, and built an Orchestrator (agent loop) with
+tool calling that routes user intents to specialized tools and runs multi-step flows until the booking is complete. A
+pre-processing Guard Layer redacts PII and payment card numbers, with rate limiting and abuse prevention to control
+inference costs. Own the deployment lifecycle: server configuration, CI/CD pipelines and high-availability hosting.
 &rarr; Template: [**llm-booking-agent**](https://github.com/SWE-Gerges/llm-booking-agent)
 
 Earlier work: an **enterprise digital archiving engine** at Microfilm Egypt (high-throughput document management and batch
@@ -110,13 +111,13 @@ Architecture during military service.
 **Languages:** C#, JavaScript/TypeScript, SQL, Python, Java, C++<br/>
 **Backend:** .NET 8, ASP.NET Core (Web API, MVC), Entity Framework Core, Dapper, REST API design &amp; versioning, Hangfire, Polly<br/>
 **Data &amp; caching:** SQL Server, MongoDB, PostgreSQL, MySQL, Redis (distributed caching)<br/>
-**AI / LLM:** LLM orchestration and tool calling (Claude, Gemini, Groq), multi-model abstraction, PII redaction, rate limiting<br/>
+**AI / LLM:** Agentic AI, LLM orchestration, tool/function calling (Claude, Gemini, Groq), multi-model abstraction, guardrails (PII redaction, rate limiting)<br/>
 **Architecture:** Clean/Onion Architecture, multi-tenancy, RBAC, Repository &amp; Unit of Work, CQRS<br/>
 **DevOps &amp; testing:** Docker, Git, CI/CD pipelines, server configuration, xUnit, NUnit, Moq
 
 ---
 
 <p align="center">
-  Want to talk about backend design, supplier integrations or LLM agents?
+  Want to talk about backend design, supplier integrations or agentic AI?
   <a href="https://www.linkedin.com/in/gergestharwat/">LinkedIn</a> &middot; <a href="mailto:swe.gerges@gmail.com">swe.gerges@gmail.com</a>
 </p>
