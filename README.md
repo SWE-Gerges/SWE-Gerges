@@ -1,7 +1,7 @@
 <h1 align="center">Gerges Tharwat</h1>
 
 <p align="center">
-  <b>.NET Software Engineer &middot; Backend, APIs &amp; AI integrations</b><br/>
+  <b>.NET Software Engineer &middot; Backend, APIs &amp; AI Integrations</b><br/>
   Cairo, Egypt
 </p>
 
@@ -10,9 +10,10 @@
   <a href="mailto:swe.gerges@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-swe.gerges%40gmail.com-D14836?style=flat&logo=gmail&logoColor=white"/></a>
 </p>
 
-I build the backend of travel-booking platforms: many tenants on one API, many hotel and transfer suppliers behind one
-contract, and a chat agent that can take a booking all the way to payment without ever being trusted with the price.
-About four years of production .NET, and the last two on a multi-tenant travel platform.
+.NET backend engineer with ~4 years of experience building multi-tenant travel-booking platforms, high-volume supplier
+integrations (Hotels and Flights providers), WhatsApp Integration and an LLM-orchestrated booking chatbot. Strong in
+ASP.NET Core, clean architecture, MongoDB/SQL Server and resilient distributed systems. Owns work end to end, from design
+through certification and deployment.
 
 ---
 
@@ -20,72 +21,74 @@ About four years of production .NET, and the last two on a multi-tenant travel p
 
 | When | Where | What I did |
 | --- | --- | --- |
-| Jul 2022 &ndash; Feb 2023 | VB Solution | **.NET backend intern.** My first APIs and endpoints in ASP.NET Core. |
-| Feb 2023 &ndash; Mar 2024 | National service | **Full-stack .NET developer.** Whole projects on ASP.NET Core MVC and Web API, built on Onion architecture so they stayed loosely coupled. |
-| Feb &ndash; Jun 2024 | Microfilm Egypt | **.NET developer.** A document-archiving system with background queues, and SQL tuning for millions of records. |
-| Jun 2024 &ndash; now | Techeffic &#124; Depkey Group | **Full-stack engineer.** I own the backend of a multi-tenant travel platform, its supplier integrations and meta-search, and an LLM-orchestrated booking chatbot. |
+| Jul 2022 &ndash; Feb 2023 | VB Solution | **.NET Backend Developer Intern.** Built APIs and endpoints for web applications using ASP.NET Core. |
+| Feb 2023 &ndash; Mar 2024 | Egyptian Armed Forces (military service) | **Full Stack .NET Developer.** Delivered full projects on .NET Core (MVC, Web API) using Onion Architecture to build loosely coupled applications. |
+| Feb &ndash; Jun 2024 | Microfilm Egypt | **Software Engineer, .NET Developer.** Delivered solutions in .NET Core (ASP.NET Web API and MVC): database design, unit tests, integration with other software, and deployment, including a high-throughput digital archiving engine with background processing queues. |
+| Jun 2024 &ndash; now | Techeffic &#124; Depkey Group | **Full-Stack Software Engineer.** Own the backend of a multi-tenant (B2C / B2B / B2E) travel booking platform, its supplier integrations and meta-search, and an LLM-orchestrated booking chatbot, working in .NET Core with hands-on Angular. |
 
-Education: B.Sc. Computer Science (Software Engineering), Ahram Canadian University, 2018&ndash;2022 &middot; graduation project graded 4.00 (A) &middot; ITI .NET Core web development track.
+Education: B.Sc. Computer Science, Software Engineering, Ahram Canadian University (ACU), 2018&ndash;2022 &middot; graduation project grade 4.00 (A) &middot; ITI .NET Core web development (2021).
 
 ---
 
-## What I work on, in the order I would explain it
+## Featured engineering projects, in the order I would explain them
 
 ```mermaid
 flowchart LR
     A["Clients<br/>web, widget, partners"] --> B["One multi-tenant API"]
-    B --> C{"Who may see which<br/>bookings? (role)"}
-    B --> D["Supplier fan-out<br/>timeouts, retries, circuit breakers"]
+    B --> C{"Who may see which<br/>bookings? (RoleId)"}
+    B --> D["Concurrent supplier fan-out<br/>Hotelbeds, Bedzinn, WebBeds, TBO, RateHawk<br/>Polly retry + circuit breaker, Redis cache"]
     D --> E["Merge and price<br/>one canonical hotel"]
-    B --> F["Customer messages<br/>outbox to WhatsApp Cloud API"]
-    B --> G["Chat agent<br/>LLM tools behind guards"]
+    B --> F["Reservation updates<br/>direct WhatsApp / Meta API"]
+    B --> G["Chat agent<br/>Claude, Gemini, Groq behind guards"]
 ```
 
-**1. One platform, many tenants.**
-A single backend serves B2C, B2B and corporate (B2E) clients with tenant isolation. I refactored the core
-authentication and authorization project to give it granular role-based access control, so what a user can see of a
-booking depends on their role. I also designed the extranet module that lets a client sell its own hotel inventory
-directly.
-&rarr; Reference implementation: [**rbac-role-families**](https://github.com/SWE-Gerges/rbac-role-families)
+**1. Multi-tenant booking platform and extranet.**
+Architected a single-backend, multi-tenant (B2C / B2B / B2E) travel booking system serving multiple corporate clients for
+corporate ticketing and reservations, with tenant isolation. Designed an Extranet inventory module for direct booking of
+self-owned hotel inventory, and refactored the core authentication/authorization project with granular role-based access
+control (RBAC) restricting booking access by RoleId. Integrated WhatsApp/Meta APIs directly (bypassing middleman
+providers) to send transactional reservation updates.
+&rarr; Template: [**rbac-role-families**](https://github.com/SWE-Gerges/rbac-role-families) and
+[**whatsapp-cloud-notifications**](https://github.com/SWE-Gerges/whatsapp-cloud-notifications)
 
-**2. Many suppliers, one answer.**
-An asynchronous meta-search and aggregation engine that queries hotel and transfer suppliers at the same time and
-copes with their different latencies and rate limits (Redis caching, Polly retries and circuit breakers). I took
-supplier integrations through the providers' certification audits that gate live data, and migrated 5M+ supplier hotel
-records from SQL Server to MongoDB behind a mapper that turns provider-specific documents into one standard shape.
-&rarr; Reference implementations: [**hotel-supplier-hub**](https://github.com/SWE-Gerges/hotel-supplier-hub) and
+**2. Meta-search aggregation engine.**
+Engineered an asynchronous meta-search and aggregation engine integrating with global travel platforms (Wego, Google,
+Trivago, SeatPick) and direct suppliers. Personally integrated Hotelbeds and Bedzinn; optimized WebBeds, TBO, RateHawk and
+Hotelbeds transfers. Secured the official provider API certifications that gate live-data production access. Aggregated
+rates from multiple providers concurrently, and handled latency variance and rate limits with Redis distributed caching
+and Polly policies (Retry, Circuit Breaker). Led the migration of 5M+ supplier hotel records (static data) from MSSQL to
+MongoDB, with a dynamic C# mapper that reads provider-specific collections and maps them to standard DTOs for search.
+&rarr; Template: [**hotel-supplier-hub**](https://github.com/SWE-Gerges/hotel-supplier-hub) and
 [**mongo-content-store**](https://github.com/SWE-Gerges/mongo-content-store)
 
-**3. Telling the customer, reliably.**
-Transactional reservation updates sent through the Meta WhatsApp Cloud API directly, instead of through a middleman
-provider. The hard part is not sending one message but never sending it twice and knowing what to do when the answer
-is lost.
-&rarr; Reference implementation: [**whatsapp-cloud-notifications**](https://github.com/SWE-Gerges/whatsapp-cloud-notifications)
+**3. AI travel advisor chatbot (LLM orchestrator).**
+Architected an end-to-end agent-driven booking ecosystem (widget and standalone site) where users search, manage and pay
+for flights, hotels and transfers through a conversational interface. Integrated multiple LLMs (Claude, Gemini, Groq)
+behind a model-switching abstraction with one-click switching, and built an Orchestrator pattern that routes user intents
+to specialized tools. A pre-processing Guard Layer redacts PII and payment card numbers, with rate limiting and abuse
+prevention to control inference costs. Own the deployment lifecycle: server configuration, CI/CD pipelines and
+high-availability hosting.
+&rarr; Template: [**llm-booking-agent**](https://github.com/SWE-Gerges/llm-booking-agent)
 
-**4. A chat agent that can book, but cannot be talked into anything.**
-An LLM-orchestrated assistant where users search, manage and pay for flights, hotels and transfers in conversation.
-Claude, Gemini and Groq sit behind one switchable abstraction, a guard layer redacts personal and card data before the
-model sees it, and rate limiting keeps inference cost under control. I also own its deployment: servers, CI/CD and
-hosting.
-&rarr; Reference implementation: [**llm-booking-agent**](https://github.com/SWE-Gerges/llm-booking-agent)
+Earlier work: an **enterprise digital archiving engine** at Microfilm Egypt (high-throughput document management and batch
+indexing, background queues, SQL tuning for millions of records) and a **decoupled enterprise portal** on Onion (Clean)
+Architecture during military service.
 
 ---
 
-## Open-source reference implementations
+## Templates, not the original code
 
-Five repositories, each runnable with only the .NET SDK, each with architecture decision records and a README that says
-plainly what is tested and what is not.
+> **The linked repositories are templates that demonstrate the designs above. They are not the original code, which is
+> proprietary.** They use in-memory fakes instead of real suppliers or providers, are generic by design, and run with
+> only the .NET SDK. Each README says plainly what is tested and what is not.
 
-| Repository | What it shows | CI |
+| Template | What it shows | CI |
 | --- | --- | --- |
 | [**llm-booking-agent**](https://github.com/SWE-Gerges/llm-booking-agent) | A provider-agnostic agent loop with tool policies, where money and identity are owned by the server, never the model. | [![CI](https://github.com/SWE-Gerges/llm-booking-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/llm-booking-agent/actions/workflows/ci.yml) |
 | [**whatsapp-cloud-notifications**](https://github.com/SWE-Gerges/whatsapp-cloud-notifications) | An outbox, signed webhooks, delivery receipts, the 24-hour window rule, and a state for "we do not know if it was sent". | [![CI](https://github.com/SWE-Gerges/whatsapp-cloud-notifications/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/whatsapp-cloud-notifications/actions/workflows/ci.yml) |
 | [**mongo-content-store**](https://github.com/SWE-Gerges/mongo-content-store) | Tolerant decoding of messy supplier data, a resumable MongoDB-to-OpenSearch sync, and a versioned index swapped by alias. | [![CI](https://github.com/SWE-Gerges/mongo-content-store/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/mongo-content-store/actions/workflows/ci.yml) |
 | [**hotel-supplier-hub**](https://github.com/SWE-Gerges/hotel-supplier-hub) | Resilient fan-out to suppliers with different protocols, canonical hotel identities, and quotes that book exactly what was shown. | [![CI](https://github.com/SWE-Gerges/hotel-supplier-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/hotel-supplier-hub/actions/workflows/ci.yml) |
 | [**rbac-role-families**](https://github.com/SWE-Gerges/rbac-role-families) | Roles grouped into families whose strategy produces the query itself, so lists and single lookups cannot disagree. | [![CI](https://github.com/SWE-Gerges/rbac-role-families/actions/workflows/ci.yml/badge.svg)](https://github.com/SWE-Gerges/rbac-role-families/actions/workflows/ci.yml) |
-
-These are original code written to demonstrate the patterns. They use fakes instead of real suppliers or providers, and
-none of them contains an employer's code or data.
 
 ---
 
@@ -104,10 +107,12 @@ none of them contains an employer's code or data.
   <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white"/>
 </p>
 
-**Backend:** ASP.NET Core Web API and MVC, EF Core, Dapper, REST design and versioning, Hangfire, Polly<br/>
-**Architecture:** clean and onion architecture, multi-tenancy, RBAC, repository and unit of work, CQRS<br/>
-**AI:** LLM orchestration and tool calling (Claude, Gemini, Groq), multi-model abstraction, PII redaction, rate limiting<br/>
-**Testing and delivery:** xUnit, NUnit, Moq, CI/CD pipelines, Git
+**Languages:** C#, JavaScript/TypeScript, SQL, Python, Java, C++<br/>
+**Backend:** .NET 8, ASP.NET Core (Web API, MVC), Entity Framework Core, Dapper, REST API design &amp; versioning, Hangfire, Polly<br/>
+**Data &amp; caching:** SQL Server, MongoDB, PostgreSQL, MySQL, Redis (distributed caching)<br/>
+**AI / LLM:** LLM orchestration and tool calling (Claude, Gemini, Groq), multi-model abstraction, PII redaction, rate limiting<br/>
+**Architecture:** Clean/Onion Architecture, multi-tenancy, RBAC, Repository &amp; Unit of Work, CQRS<br/>
+**DevOps &amp; testing:** Docker, Git, CI/CD pipelines, server configuration, xUnit, NUnit, Moq
 
 ---
 
